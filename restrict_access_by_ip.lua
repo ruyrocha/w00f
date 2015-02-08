@@ -13,17 +13,17 @@ local ok, err = redis_conn:connect("127.0.0.1", 6379)
 
 if not ok then
   ngx.log(ngx.ERR, "Failed to connect to Redis: ", err)
-  return ngx.exit(500)
+  return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
 end
 
 local ip_exists, err = redis_conn:get(ip)
 
 if not ip_exists then
   ngx.log(ngx.ERR, "Failed to get IP from Redis: ", err)
-  return ngx.exit(500)
+  return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
 end
 
 if ip_exists == ngx.null then
   ngx.log(ngx.ERR, "Unauthorized Access Attempt")
-  return ngx.exit(500)
+  return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
 end
